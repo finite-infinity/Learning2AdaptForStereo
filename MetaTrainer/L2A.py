@@ -179,6 +179,7 @@ class L2A_Wad(L2A):
     def _build_adaptation_loss(self, current_net, inputs):
         #compute adaptation loss and gradients
         reprojection_error = loss_factory.get_reprojection_loss('ssim_l1',reduced=False)(current_net.get_disparities(),inputs)[0]
+        # 得到uncertainty weight 用来给loss加权
         weight, self._weighting_network_vars = sharedLayers.weighting_network(reprojection_error,reuse=self._reuse,training=True)
         return tf.reduce_sum(reprojection_error*weight)
     
